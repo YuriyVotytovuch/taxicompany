@@ -16,16 +16,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/register", "/api/login", "/login.html", "/reg.html").permitAll()
-                .anyRequest().authenticated()
+                        .requestMatchers("/**").permitAll()
                 )
                 .formLogin(form -> form
-                .loginPage("/login.html")
-                .loginProcessingUrl("/api/login")
-                .defaultSuccessUrl("/index.html", true)
-                .permitAll()
+                        .loginPage("/login.html")
+                        .loginProcessingUrl("/api/login")
+                        .defaultSuccessUrl("/Main.html", true)
+                        .permitAll()
                 )
-
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
@@ -33,8 +31,10 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .accessDeniedPage("/error?accessDenied")
                 );
+
         return http.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
