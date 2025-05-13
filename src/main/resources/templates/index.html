@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Valik Taxi — Ваш комфортний сервіс таксі</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link href="taxi.js" rel="js">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+        <a href="index.html"><img class="logo-img" src="logo.svg" alt="Italian Trulli"></a>
+        <a href="index.html"><p>Valik Taxi</p></a>
+      </div>
+    <div>
+      <a href="services.html">Послуги</a>
+      <a href="Contact.html">Контакти</a>
+      <a href="login.html">Вхід</a>
+    </div>
+    </nav>
+  
+
+<header>
+  <h1>Швидке та Надійне Таксі</h1>
+  <p>Ваш комфорт — наш пріоритет!</p>
+  <button class="btn" onclick="openModal()">Замовити зараз</button>
+</header>
+
+<div class="modal" id="orderModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h3>Замовлення Таксі</h3>
+    <form onsubmit="event.preventDefault(); submitForm();">
+      <input type="text" placeholder="Ваше ім'я" required>
+      <input type="tel" placeholder="Ваш телефон" required>
+      <textarea rows="4" placeholder="Куди потрібно їхати?" required></textarea>
+      <input type="submit" value="Замовити">
+    </form>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Valik Taxi. Всі права захищено.</p>
+</footer>
+</body>
+</html>

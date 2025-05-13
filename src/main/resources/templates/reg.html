@@ -1,0 +1,39 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Valik Taxi — Ваш комфортний сервіс таксі</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylelog.css">
+    <link href="taxi.js" rel="js">
+  </head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="index.html"><img class="logo-img" src="logo.svg" alt="Italian Trulli"></a>
+            <a href="index.html"><p>Valik Taxi</p></a>
+          </div>
+        <div>
+          <a href="services.html">Послуги</a>
+          <a href="Contact.html">Контакти</a>
+          <a href="login.html">Вхід</a>
+        </div>
+        </nav>
+    <div class="center">
+    <div class="register-container">
+      <h2>Реєстрація у Valik Taxi</h2>
+      <form action="/submit-registration" method="post">
+        <label for="name">Ім’я</label>
+        <input type="text" id="name" name="name" required />
+  
+        <label for="email">Електронна пошта</label>
+        <input type="email" id="email" name="email" required />
+  
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" required />
+  
+        <button type="submit">Зареєструватися</button>
+      </form>
+    </div>
+    </div>
+</body>
+</html>
