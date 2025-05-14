@@ -1,7 +1,12 @@
 package com.example.taxicompany.controller;
 
+import com.example.taxicompany.entity.User;
+import com.example.taxicompany.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PageController {
@@ -30,9 +35,8 @@ public class PageController {
     public String contact() {
         return "contact";
     }
-
-    @GetMapping("/register")
-    public String register() {
-        return "reg";
-    }
+//    @GetMapping("/reg")
+//    public String reg() {
+//        return "reg";
+//    }
 }

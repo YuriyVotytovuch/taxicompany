@@ -2,6 +2,7 @@ package com.example.taxicompany.service;
 
 import com.example.taxicompany.entity.User;
 import com.example.taxicompany.repository.UserRepository;
+import com.example.taxicompany.security.PasswordEncoderConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,20 +11,14 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public User registerUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username already exists");
-        }
-        if (userRepository.existsByUsername(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
-        user.setEnabled(true);
+    private PasswordEncoderConfig passwordEncoderConfig;
+    public User createUser(User user) {
+        user.setPassword(passwordEncoderConfig.passwordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
+    public boolean usernameExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }
+

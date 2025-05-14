@@ -18,11 +18,4 @@ public class DatabaseUser {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    public void createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
-        user.setEnabled(true);
-        userRepository.save(user);
     }
-}
