@@ -2,15 +2,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Valik Taxi — Ваш комфортний сервіс таксі</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylelog.css">
-    <link href="taxi.js" rel="js">
+    <script src="taxi.js"></script>
   </head>
+<style>
+    :root {
+        --primary: #ffc107;
+        --dark: #212529;
+        --light: #f8f9fa;
+        --accent: #ff6f00;
+        --transition: all 0.4s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
+    }
+
+    .center {
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .register-container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background-color: var(--primary);
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background-color: var(--accent);
+    }
+
+    nav {
+        background: var(--dark);
+        padding: 15px 20px;
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        text-decoration: none;
+    }
+
+    .logo-img {
+        width: 25px;
+        height: 25px;
+        object-fit: cover;
+    }
+
+    nav a {
+        color: #ffffff;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+
+    nav a:hover {
+        color: var(--primary);
+    }
+
+</style>
 <body>
 <nav>
         <div class="logo">
-            <a href="index.html"><img class="logo-img" src="logo.svg" alt="Italian Trulli"></a>
-            <a href="index.html"><p>Valik Taxi</p></a>
+            <a href="Main.html"><img class="logo-img" src="https://i.imgur.com/xQrNR8y.png" alt="Italian Trulli"></a>
+            <a href="Main.html"><p>Valik Taxi</p></a>
           </div>
         <div>
           <a href="services.html">Послуги</a>

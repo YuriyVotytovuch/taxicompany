@@ -5,14 +5,221 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Valik Taxi — Ваш комфортний сервіс таксі</title>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="style.css">
-      <link href="taxi.js" rel="js">
+
+      <script src="taxi.js"></script>
       </head>
+    <style>
+
+      :root {
+        --primary: #ffc107;
+        --dark: #212529;
+        --light: #f8f9fa;
+        --accent: #ff6f00;
+        --transition: all 0.4s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: 'Roboto', sans-serif;
+        background: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
+      }
+      .logo-img {
+        width: 25px;
+        height: 25px;
+        object-fit: cover;
+      }
+      nav {
+        background: var(--dark);
+        padding: 15px 20px;
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+
+
+      nav a {
+        color: #fff;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      nav a:hover {
+        color: var(--primary);
+      }
+      header {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://i.imgur.com/qn0TZu5.jpeg') center/cover no-repeat;
+        height: 100vh;
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+
+      header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+      }
+
+      .btn {
+        padding: 15px 35px;
+        background: var(--primary);
+        color: var(--dark);
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .btn:hover {
+        background: var(--accent);
+        transform: scale(1.05);
+      }
+
+      section {
+        padding: 80px 20px;
+        text-align: center;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: var(--dark);
+      }
+
+      .features, .contacts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .feature, .contact {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: var(--transition);
+      }
+
+      .feature:hover, .contact:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      }
+
+      .feature i, .contact i {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 15px;
+      }
+
+      footer {
+        background: var(--dark);
+        color: #ccc;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.9rem;
+        margin-top: 80px;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        position: relative;
+      }
+
+      .modal-content input, .modal-content textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      .modal-content input[type="submit"] {
+        background: var(--primary);
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .modal-content input[type="submit"]:hover {
+        background: var(--accent);
+      }
+
+      .close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--dark);
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
 <body>
   <nav>
     <div class="logo">
-        <a href="index.html"><img class="logo-img" src="logo.svg" alt="Italian Trulli"></a>
-        <a href="index.html"><p>Valik Taxi</p></a>
+        <a href="Main.html"><img class="logo-img" src="logo.svg" alt="Italian Trulli"></a>
+        <a href="Main.html"><p>Valik Taxi</p></a>
       </div>
     <div>
       <a href="services.html">Послуги</a>
