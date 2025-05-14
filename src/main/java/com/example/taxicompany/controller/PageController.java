@@ -8,7 +8,7 @@ public class PageController {
 
     @GetMapping("/")
     public String home() {
-        return "Main";
+        return "main";
     }
 
     @GetMapping("/login")
@@ -18,7 +18,7 @@ public class PageController {
 
     @GetMapping("/main")
     public String main() {
-        return "Main";
+        return "main";
     }
 
     @GetMapping("/services")
@@ -28,7 +28,7 @@ public class PageController {
 
     @GetMapping("/contact")
     public String contact() {
-        return "Contact";
+        return "contact";
     }
 
     @GetMapping("/register")
