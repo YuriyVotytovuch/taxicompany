@@ -1,27 +1,33 @@
 package com.example.taxicompany.controller;
 
+import com.example.taxicompany.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
 
 @Controller
 public class AuthController {
-    @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "logout", required = false) String logout,
-                        Model model) {
-        if (error != null) {
-            model.addAttribute("error", "Неправильна електронна пошта або пароль");
-        }
-        if (logout != null) {
-            model.addAttribute("error", "Ви успішно вийшли з системи");
-        }
-        return "login";
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/")
-    public String enter() {
+    public String enter(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/account";
+        }
         return "redirect:/login";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/logout-success")
+    public String logout() {
+        return "redirect:/login?logout=true";
     }
 }
