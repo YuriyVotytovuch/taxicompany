@@ -64,5 +64,4 @@ public class SecurityConfig {
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Користувача не знайдено: " + username));
     }
-
 }

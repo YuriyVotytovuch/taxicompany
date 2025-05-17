@@ -16,8 +16,10 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String startPoint;
-    private String endPoint;
-    private String date;
-    private String time;
+    private String fromStreet;
+    private String fromNumber;
+    private String toStreet;
+    private String toNumber;
+
+
 }

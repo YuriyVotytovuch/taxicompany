@@ -3,18 +3,27 @@ package com.example.taxicompany.controller;
 import com.example.taxicompany.entity.Trip;
 import com.example.taxicompany.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-@RestController
-@RequestMapping("/api")
+@Controller
 public class TripController {
+
     @Autowired
     private TripService tripService;
 
     @PostMapping("/trips")
-    public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) {
-        Trip createdTrip = tripService.createTrip(trip);
-        return ResponseEntity.ok(createdTrip);
+    public String createTrip(@ModelAttribute Trip trip) {
+        tripService.createTrip(trip);
+        return "redirect:/account";
+    }
+
+    @GetMapping("/account")
+    public String getAccountPage(Model model) {
+        model.addAttribute("trip", new Trip());
+        return "account";
     }
 }
