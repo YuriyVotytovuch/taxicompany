@@ -36,7 +36,7 @@ public class RegController {
         user.setEnabled(true);
         user.setRole("USER");
         userService.createUser(user);
-        return "redirect:/login";
+        return "redirect:/account";
     }
-    }
+}
 

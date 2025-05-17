@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/services", "/login", "/main", "/contact", "/register").permitAll()
+                        .requestMatchers("/services", "/login", "/main", "/contact", "/register").permitAll()
                         .requestMatchers("/account").authenticated()
                         .anyRequest().authenticated()
                 )
@@ -48,10 +48,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
 
     @Bean
     public UserDetailsService userDetailsService() {

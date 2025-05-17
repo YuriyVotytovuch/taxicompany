@@ -20,8 +20,4 @@ public class PageController {
     public String contact() {
         return "contact";
     }
-//    @GetMapping("/account")
-//    public String account() {
-//        return "account";
-//    }
 }
