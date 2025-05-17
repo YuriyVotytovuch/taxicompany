@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Аккаунт користувача</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="taxi.js"></script>
     <style>
         :root {
             --primary: #ffc107;
@@ -91,13 +90,13 @@
             transform: scale(1.05);
         }
 
-        #modal-toggle {
+        #modal-toggle, #trips-modal-toggle {
             display: none;
         }
 
-        .modal {
+        .modal, .trips-modal {
             position: fixed;
-            top: 0; left: at 0; right: 0; bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.7);
             display: none;
             justify-content: center;
@@ -105,11 +104,11 @@
             z-index: 2000;
         }
 
-        #modal-toggle:checked + .modal {
+        #modal-toggle:checked + .modal, #trips-modal-toggle:checked + .trips-modal {
             display: flex;
         }
 
-        .modal-content {
+        .modal-content, .trip-modal {
             background: white;
             padding: 40px;
             border-radius: 15px;
@@ -120,7 +119,12 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .modal-content h2 {
+        .trip-modal {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2, .trip-modal h2 {
             margin-top: 0;
             color: var(--dark);
             margin-bottom: 20px;
@@ -177,7 +181,7 @@
             transform: scale(1.05);
         }
 
-        .close-label {
+        .close-label, .close-btn {
             display: inline-block;
             margin-top: 25px;
             padding: 10px 25px;
@@ -187,13 +191,14 @@
             font-weight: bold;
             cursor: pointer;
             transition: var(--transition);
+            text-decoration: none;
         }
 
-        .close-label:hover {
+        .close-label:hover, .close-btn:hover {
             background-color: #c9302c;
         }
 
-        #theme-toggle{
+        #theme-toggle {
             margin-left: 20px;
             padding: 6px 12px;
             border-radius: 8px;
@@ -264,7 +269,7 @@
                 align-items: flex-start;
             }
 
-            .modal-content {
+            .modal-content, .trip-modal {
                 padding: 25px;
             }
 
@@ -290,7 +295,8 @@
 
         .dark-theme .feature,
         .dark-theme .contact,
-        .dark-theme .modal-content {
+        .dark-theme .modal-content,
+        .dark-theme .trip-modal {
             background: #1e1e1e;
             color: var(--dark);
         }
@@ -315,6 +321,24 @@
         .dark-theme footer a:hover {
             color: var(--primary);
         }
+
+        /* Стилі для таблиці поїздок */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--dark);
+        }
     </style>
 </head>
 <body>
@@ -327,12 +351,63 @@
         <a href="/services">Послуги</a>
         <a href="/contact">Контакти</a>
         <a th:href="@{/logout-success}">Вихід з аккаунту</a>
-        <button id="theme-toggle" title="Перемкнути тему" onclick="theme-toggle()">🌙</button>
+        <button id="theme-toggle" title="Перемкнути тему" onclick="toggleTheme()">🌙</button>
     </div>
 </nav>
 
-<div class="container">
+<div class="container" th:if="${#authorization.expression('hasRole(''USER'') or hasRole(''DRIVER'') or hasRole(''ADMIN'')')}">
     <label for="modal-toggle" class="order-btn">Замовити поїздку</label>
+</div>
+
+<div class="container" th:if="${#authorization.expression('hasRole(''USER'') or hasRole(''ADMIN'')')}">
+    <label for="modal-toggle" class="order-btn">Стати водієм</label>
+</div>
+
+<div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+    <label for="modal-toggle" class="order-btn">Одобрити водія</label>
+</div>
+
+<div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''DRIVER'')')}">
+    <label for="trips-modal-toggle" class="order-btn">Переглянути доступні поїздки</label>
+</div>
+
+<input type="checkbox" id="trips-modal-toggle" />
+<div class="trips-modal">
+    <div class="trip-modal">
+        <h2>Доступні поїздки</h2>
+        <div th:if="${trips == null or trips.isEmpty()}">
+            <p>Немає доступних поїздок.</p>
+        </div>
+        <div th:unless="${trips == null or trips.isEmpty()}">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>З вулиці</th>
+                    <th>Номер будинку</th>
+                    <th>До вулиці</th>
+                    <th>Номер будинку</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="trip : ${trips}">
+                    <td th:text="${trip.id}"></td>
+                    <td th:text="${trip.fromStreet}"></td>
+                    <td th:text="${trip.fromNumber}"></td>
+                    <td th:text="${trip.toStreet}"></td>
+                    <td th:text="${trip.toNumber}"></td>
+                    <td>
+                        <form th:action="@{/trips/submit}" method="post">
+                            <input type="hidden" name="tripId" th:value="${trip.id}"/>
+                            <button type="submit">Узятись за поїздку</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <label for="trips-modal-toggle" class="close-btn">Закрити</label>
+    </div>
 </div>
 
 <input type="checkbox" id="modal-toggle" />
@@ -414,6 +489,10 @@
     </p>
 </footer>
 
-<script src="/taxi.js"></script>
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+    }
+</script>
 </body>
 </html>

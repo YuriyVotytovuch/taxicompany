@@ -20,6 +20,8 @@ public class Trip {
     private String fromNumber;
     private String toStreet;
     private String toNumber;
-
-
+    private String status;
+    private Boolean active;
+    private String driverName;
+    private String userName;
 }

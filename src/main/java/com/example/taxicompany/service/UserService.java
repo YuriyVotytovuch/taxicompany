@@ -4,7 +4,6 @@ import com.example.taxicompany.entity.User;
 import com.example.taxicompany.repository.UserRepository;
 import com.example.taxicompany.security.PasswordEncoderConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
