@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Аккаунт користувача</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="taxi.js"></script>
     <style>
         :root {
             --primary: #ffc107;
@@ -90,14 +91,13 @@
             transform: scale(1.05);
         }
 
-        /* Modal Checkbox */
         #modal-toggle {
             display: none;
         }
 
         .modal {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0; left: at 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.7);
             display: none;
             justify-content: center;
@@ -193,13 +193,12 @@
             background-color: #c9302c;
         }
 
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
+        #theme-toggle{
+            margin-left: 20px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
             cursor: pointer;
-            color: var(--dark);
         }
 
         section {
@@ -250,6 +249,15 @@
             margin-top: 80px;
         }
 
+        footer a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             nav {
                 flex-direction: column;
@@ -264,8 +272,50 @@
                 width: 100%;
             }
         }
-    </style>
 
+        /* Dark Theme Styles */
+        .dark-theme {
+            --primary: #ffb300;
+            --dark: #f8f9fa;
+            --light: #121212;
+            --accent: #ffa000;
+            --danger: #e57373;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .dark-theme nav {
+            background: #1e1e1e;
+        }
+
+        .dark-theme .feature,
+        .dark-theme .contact,
+        .dark-theme .modal-content {
+            background: #1e1e1e;
+            color: var(--dark);
+        }
+
+        .dark-theme input,
+        .dark-theme textarea {
+            background: #2a2a2a;
+            color: #f1f1f1;
+            border: 1px solid #555;
+        }
+
+        .dark-theme input:focus,
+        .dark-theme textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .dark-theme footer {
+            background: #1e1e1e;
+            color: #aaa;
+        }
+
+        .dark-theme footer a:hover {
+            color: var(--primary);
+        }
+    </style>
 </head>
 <body>
 <nav>
@@ -277,6 +327,7 @@
         <a href="/services">Послуги</a>
         <a href="/contact">Контакти</a>
         <a th:href="@{/logout-success}">Вихід з аккаунту</a>
+        <button id="theme-toggle" title="Перемкнути тему" onclick="theme-toggle()">🌙</button>
     </div>
 </nav>
 
@@ -284,7 +335,6 @@
     <label for="modal-toggle" class="order-btn">Замовити поїздку</label>
 </div>
 
-<!-- Модальне вікно -->
 <input type="checkbox" id="modal-toggle" />
 <div class="modal">
     <div class="modal-content">
@@ -324,5 +374,46 @@
     </div>
 </div>
 
+<section>
+    <h2>Мої поїздки</h2>
+    <div class="features">
+        <div class="feature">
+            <p><strong>Дата:</strong> 15.05.2025</p>
+            <p><strong>Звідки:</strong> вул. Шевченка, 10</p>
+            <p><strong>Куди:</strong> вул. Франка, 25</p>
+            <p><strong>Статус:</strong> Виконано</p>
+        </div>
+        <div class="feature">
+            <p><strong>Дата:</strong> 14.05.2025</p>
+            <p><strong>Звідки:</strong> просп. Перемоги, 1</p>
+            <p><strong>Куди:</strong> вул. Лесі Українки, 8</p>
+            <p><strong>Статус:</strong> Скасовано</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Часті запитання</h2>
+    <div class="features">
+        <div class="feature">
+            <p><strong>Як замовити поїздку?</strong></p>
+            <p>Натисніть кнопку “Замовити поїздку” та заповніть форму.</p>
+        </div>
+        <div class="feature">
+            <p><strong>Чи можу я оплатити карткою?</strong></p>
+            <p>Так, водії приймають оплату карткою або готівкою.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Valik Taxi. Всі права захищені.</p>
+    <p>
+        <a href="https://facebook.com" target="_blank">Facebook</a> |
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+    </p>
+</footer>
+
+<script src="/taxi.js"></script>
 </body>
 </html>
