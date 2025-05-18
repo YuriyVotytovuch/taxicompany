@@ -13,7 +13,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/redirect_login")
     public String enter(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             return "redirect:/account";
@@ -26,8 +26,8 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping("/logout-success")
-    public String logout() {
-        return "redirect:/login?logout=true";
+    @GetMapping("/logout")
+    public String Logout(){
+        return "redirect:login";
     }
 }

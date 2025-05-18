@@ -221,10 +221,16 @@
             <a href="/main"><p>Valik Taxi</p></a>
           </div>
         <div>
-            <a href="/services">Послуги</a>
-            <a href="/contact">Контакти</a>
-            <a href="/login">Вхід</a>
-        </div>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <a href="/services">Послуги</a>
+                <a href="/contact">Контакти</a>
+                <a href=/account>Аккаунт</a>
+            </div>
+            <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                <a href="/services">Послуги</a>
+                <a href="/contact">Контакти</a>
+                <a th:href="@{/login}">Увійти</a>
+            </div>
     </nav>
 
       <section id="contacts">

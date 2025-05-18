@@ -90,11 +90,11 @@
             transform: scale(1.05);
         }
 
-        #order-modal-toggle, #trips-modal-toggle, #confirm-modal-toggle, #driver-modal-toggle, #approve-driver-modal-toggle, #admin-approve-driver-modal-toggle {
+        #order-modal-toggle, #trips-modal-toggle, #confirm-modal-toggle, #driver-modal-toggle, #approve-driver-modal-toggle, #admin-approve-driver-modal-toggle, #trip-status-modal-toggle {
             display: none;
         }
 
-        .modal, .trips-modal, .confirm-modal, .driver-modal, .approve-driver-modal, .admin-approve-driver-modal {
+        .modal, .trips-modal, .confirm-modal, .driver-modal, .approve-driver-modal, .admin-approve-driver-modal, .trip-status-modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.7);
@@ -109,11 +109,12 @@
         #confirm-modal-toggle:checked + .confirm-modal,
         #driver-modal-toggle:checked + .driver-modal,
         #approve-driver-modal-toggle:checked + .approve-driver-modal,
-        #admin-approve-driver-modal-toggle:checked + .admin-approve-driver-modal {
+        #admin-approve-driver-modal-toggle:checked + .admin-approve-driver-modal,
+        #trip-status-modal-toggle:checked + .trip-status-modal {
             display: flex;
         }
 
-        .modal-content, .trip-modal, .confirm-modal-content, .driver-modal-content, .approve-driver-modal-content, .admin-approve-driver-modal-content {
+        .modal-content, .trip-modal, .confirm-modal-content, .driver-modal-content, .approve-driver-modal-content, .admin-approve-driver-modal-content, .trip-status-modal-content {
             background: white;
             padding: 40px;
             border-radius: 15px;
@@ -124,12 +125,12 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .trip-modal, .confirm-modal-content, .driver-modal-content, .approve-driver-modal-content, .admin-approve-driver-modal-content {
+        .trip-modal, .confirm-modal-content, .driver-modal-content, .approve-driver-modal-content, .admin-approve-driver-modal-content, .trip-status-modal-content {
             max-height: 80vh;
             overflow-y: auto;
         }
 
-        .modal-content h2, .trip-modal h2, .confirm-modal-content h2, .driver-modal-content h2, .approve-driver-modal-content h2, .admin-approve-driver-modal-content h2 {
+        .modal-content h2, .trip-modal h2, .confirm-modal-content h2, .driver-modal-content h2, .approve-driver-modal-content h2, .admin-approve-driver-modal-content h2, .trip-status-modal-content h2 {
             margin-top: 0;
             color: var(--dark);
             margin-bottom: 20px;
@@ -173,7 +174,7 @@
 
         button[type="submit"],
         .modal-content input[type="submit"],
-        .confirm-btn, .cancel-btn {
+        .confirm-btn, .cancel-btn, .refresh-btn {
             padding: 12px 30px;
             border: none;
             border-radius: 50px;
@@ -192,10 +193,16 @@
             color: white;
         }
 
+        .refresh-btn {
+            background-color: var(--primary);
+            color: var(--dark);
+        }
+
         button[type="submit"]:hover,
         .modal-content input[type="submit"]:hover,
         .confirm-btn:hover,
-        .cancel-btn:hover {
+        .cancel-btn:hover,
+        .refresh-btn:hover {
             transform: scale(1.05);
         }
 
@@ -205,6 +212,10 @@
 
         .cancel-btn:hover {
             background-color: #c9302c;
+        }
+
+        .refresh-btn:hover {
+            background-color: var(--accent);
         }
 
         .close-label, .close-btn {
@@ -289,7 +300,7 @@
                 align-items: flex-start;
             }
 
-            .modal-content, .trip-modal, .confirm-modal-content, .driver-modal-content, .approve-driver-modal-content, .admin-approve-driver-modal-content {
+            .modal-content, .trip-modal, .confirm-modal-content, .driver-modal-content, .approve-driver-modal-content, .admin-approve-driver-modal-content, .trip-status-modal-content {
                 padding: 25px;
             }
 
@@ -320,7 +331,8 @@
         .dark-theme .confirm-modal-content,
         .dark-theme .driver-modal-content,
         .dark-theme .approve-driver-modal-content,
-        .dark-theme .admin-approve-driver-modal-content {
+        .dark-theme .admin-approve-driver-modal-content,
+        .dark-theme .trip-status-modal-content {
             background: #1e1e1e;
             color: var(--dark);
         }
@@ -366,252 +378,305 @@
     </style>
 </head>
 <body>
-<nav>
-    <div class="logo">
-        <a href="/main"><img class="logo-img" src="https://i.imgur.com/xQrNR8y.png" alt="Valik LOGO"></a>
-        <a href="/main"><p>Valik Taxi</p></a>
+<div th:if="${#authorization.expression('isAuthenticated()')}">
+    <nav>
+        <div class="logo">
+            <a href="/main"><img class="logo-img" src="https://i.imgur.com/xQrNR8y.png" alt="Valik LOGO"></a>
+            <a href="/main"><p>Valik Taxi</p></a>
+        </div>
+        <div>
+            <a href="/services">Послуги</a>
+            <a href="/contact">Контакти</a>
+            <a th:href="@{/logout}">Вихід з аккаунту</a>
+            <button id="theme-toggle" title="Перемкнути тему" onclick="toggleTheme()">🌙</button>
+        </div>
+    </nav>
+
+    <div class="container" th:if="${#authorization.expression('hasRole(''USER'') or hasRole(''DRIVER'') or hasRole(''ADMIN'')')}">
+        <label for="order-modal-toggle" class="order-btn">Замовити поїздку</label>
     </div>
-    <div>
-        <a href="/services">Послуги</a>
-        <a href="/contact">Контакти</a>
-        <a th:href="@{/logout-success}">Вихід з аккаунту</a>
-        <button id="theme-toggle" title="Перемкнути тему" onclick="toggleTheme()">🌙</button>
+
+    <div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''USER'')')}">
+        <label for="driver-modal-toggle" class="order-btn">Стати водієм</label>
     </div>
-</nav>
 
-<div class="container" th:if="${#authorization.expression('hasRole(''USER'') or hasRole(''DRIVER'') or hasRole(''ADMIN'')')}">
-    <label for="order-modal-toggle" class="order-btn">Замовити поїздку</label>
-</div>
-
-<div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''USER'')')}">
-    <label for="driver-modal-toggle" class="order-btn">Стати водієм</label>
-</div>
-
-<div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''USER'')')}">
-    <label for="approve-driver-modal-toggle" class="order-btn">Одобрити водія</label>
-</div>
-
-<div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-    <label for="admin-approve-driver-modal-toggle" class="order-btn">Одобрити водія (Адмін)</label>
-</div>
-
-<div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''DRIVER'')')}">
-    <label for="trips-modal-toggle" class="order-btn">Переглянути доступні поїздки</label>
-</div>
-
-<!-- Модальне вікно для замовлення поїздки -->
-<input type="checkbox" id="order-modal-toggle" />
-<div class="modal">
-    <div class="modal-content">
-        <div th:if="${trip != null}">
-            <form th:action="@{/trips}" th:object="${trip}" method="post">
-                <h2>Замовлення поїздки</h2>
-                <div class="form-group">
-                    <label for="fromStreet">Звідки (вулиця):</label>
-                    <input type="text" id="fromStreet" th:field="*{fromStreet}" required />
-                    <span th:if="${#fields.hasErrors('fromStreet')}" th:errors="*{fromStreet}" style="color: red;"></span>
-                </div>
-                <div class="form-group">
-                    <label for="fromNumber">Звідки (номер будинку):</label>
-                    <input type="text" id="fromNumber" th:field="*{fromNumber}" required />
-                    <span th:if="${#fields.hasErrors('fromNumber')}" th:errors="*{fromNumber}" style="color: red;"></span>
-                </div>
-                <div class="form-group">
-                    <label for="toStreet">Куди (вулиця):</label>
-                    <input type="text" id="toStreet" th:field="*{toStreet}" required />
-                    <span th:if="${#fields.hasErrors('toStreet')}" th:errors="*{toStreet}" style="color: red;"></span>
-                </div>
-                <div class="form-group">
-                    <label for="toNumber">Куди (номер будинку):</label>
-                    <input type="text" id="toNumber" th:field="*{toNumber}" required />
-                    <span th:if="${#fields.hasErrors('toNumber')}" th:errors="*{toNumber}" style="color: red;"></span>
-                </div>
-                <h3>Карта (приклад Google Maps)</h3>
-                <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509363!2d144.95373531590438!3d-37.81627974202114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43f3a0a1f5%3A0xf572b5e8e5b1d930!2sFederation+Square!5e0!3m2!1sen!2sau!4v1510911762115"
-                        allowfullscreen>
-                </iframe>
-                <button type="submit" class="confirm-btn">Замовити таксі</button>
-            </form>
-        </div>
-        <div th:if="${trip == null}">
-            <p>Помилка: форма недоступна.</p>
-        </div>
-        <label for="order-modal-toggle" class="close-label">Закрити</label>
+    <div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+        <label for="admin-approve-driver-modal-toggle" class="order-btn">Одобрити водія</label>
     </div>
-</div>
 
-<!-- Модальне вікно для перегляду поїздок -->
-<input type="checkbox" id="trips-modal-toggle" />
-<div class="trips-modal">
-    <div class="trip-modal">
-        <h2>Доступні поїздки</h2>
-        <div th:if="${trips == null or trips.isEmpty()}">
-            <p>Немає доступних поїздок.</p>
-        </div>
-        <div th:unless="${trips == null or trips.isEmpty()}">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>З вулиці</th>
-                    <th>Номер будинку</th>
-                    <th>До вулиці</th>
-                    <th>Номер будинку</th>
-                    <th>Дія</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="trip : ${trips}">
-                    <td th:text="${trip.id}"></td>
-                    <td th:text="${trip.fromStreet}"></td>
-                    <td th:text="${trip.fromNumber}"></td>
-                    <td th:text="${trip.toStreet}"></td>
-                    <td th:text="${trip.toNumber}"></td>
-                    <td>
-                        <form th:action="@{/trips/accept}" method="post">
-                            <input type="hidden" name="tripId" th:value="${trip.id}"/>
-                            <button type="submit" class="confirm-btn">Узятись за поїздку</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <label for="trips-modal-toggle" class="close-btn">Закрити</label>
+    <div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''DRIVER'')')}">
+        <label for="trips-modal-toggle" class="order-btn">Переглянути доступні поїздки</label>
     </div>
-</div>
 
-<!-- Модальне вікно для підтвердження/скасування поїздки -->
-<input type="checkbox" id="confirm-modal-toggle" th:checked="${selectedTrip != null}" />
-<div class="confirm-modal">
-    <div class="confirm-modal-content">
-        <h2>Підтвердження поїздки</h2>
-        <div th:if="${selectedTrip != null}">
-            <p><strong>Куди:</strong> <span th:text="${selectedTrip.toStreet} + ', ' + ${selectedTrip.toNumber}"></span></p>
-            <form th:action="@{/trips/complete}" method="post">
-                <input type="hidden" name="tripId" th:value="${selectedTrip.id}"/>
-                <button type="submit" class="confirm-btn">Завершити поїздку</button>
-            </form>
-            <form th:action="@{/trips/cancel}" method="post">
-                <input type="hidden" name="tripId" th:value="${selectedTrip.id}"/>
-                <button type="submit" class="cancel-btn">Відмовитись від поїздки</button>
-            </form>
-        </div>
-        <div th:if="${selectedTrip == null}">
-            <p>Поїздка не вибрана.</p>
-        </div>
-        <label for="confirm-modal-toggle" class="close-btn">Закрити</label>
-    </div>
-</div>
-
-<!-- Модальне вікно для реєстрації водія -->
-<input type="checkbox" id="driver-modal-toggle" />
-<div class="driver-modal">
-    <div class="driver-modal-content">
-        <div th:if="${car != null}">
-            <form th:action="@{/cars/register}" th:object="${car}" method="post">
-                <h2>Реєстрація автомобіля</h2>
-                <div class="form-group">
-                    <label for="brand">Марка:</label>
-                    <input type="text" id="brand" th:field="*{brand}" required />
-                    <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" style="color: red;"></span>
-                </div>
-                <div class="form-group">
-                    <label for="model">Модель:</label>
-                    <input type="text" id="model" th:field="*{model}" required />
-                    <span th:if="${#fields.hasErrors('model')}" th:errors="*{model}" style="color: red;"></span>
-                </div>
-                <div class="form-group">
-                    <label for="color">Колір:</label>
-                    <input type="text" id="color" th:field="*{color}" required />
-                    <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}" style="color: red;"></span>
-                </div>
-                <div class="form-group">
-                    <label for="numberPlate">Номерний знак:</label>
-                    <input type="text" id="numberPlate" th:field="*{numberPlate}" required />
-                    <span th:if="${#fields.hasErrors('numberPlate')}" th:errors="*{numberPlate}" style="color: red;"></span>
-                </div>
-                <button type="submit" class="confirm-btn">Відправити</button>
-            </form>
-        </div>
-        <div th:if="${car == null}">
-            <p>Помилка: форма недоступна.</p>
-        </div>
-        <div th:if="${message != null}">
-            <p style="color: green;" th:text="${message}"></p>
-        </div>
-        <div th:if="${error != null}">
-            <p style="color: red;" th:text="${error}"></p>
-        </div>
-        <label for="driver-modal-toggle" class="close-btn">Закрити</label>
-    </div>
-</div>
-
-<!-- Модальне вікно для затвердження водія (користувач/адмін) -->
-<input type="checkbox" id="approve-driver-modal-toggle" />
-<div class="approve-driver-modal">
-    <div class="approve-driver-modal-content">
-        <h2>Затвердити водія</h2>
-        <p>Тут буде форма для затвердження водія (потрібна логіка).</p>
-        <label for="approve-driver-modal-toggle" class="close-btn">Закрити</label>
-    </div>
-</div>
-
-<!-- Модальне вікно для затвердження водія (адмін) -->
-<input type="checkbox" id="admin-approve-driver-modal-toggle" />
-<div class="admin-approve-driver-modal">
-    <div class="admin-approve-driver-modal-content">
-        <h2>Затвердити водія (Адмін)</h2>
-        <p>Тут буде форма для затвердження водія адміністратором (потрібна логіка).</p>
-        <label for="admin-approve-driver-modal-toggle" class="close-btn">Закрити</label>
-    </div>
-</div>
-
-<section>
-    <h2>Мої поїздки</h2>
-    <div class="features">
-        <div class="feature">
-            <p><strong>Дата:</strong> 15.05.2025</p>
-            <p><strong>Звідки:</strong> вул. Шевченка, 10</p>
-            <p><strong>Куди:</strong> вул. Франка, 25</p>
-            <p><strong>Статус:</strong> Виконано</p>
-        </div>
-        <div class="feature">
-            <p><strong>Дата:</strong> 14.05.2025</p>
-            <p><strong>Звідки:</strong> просп. Перемоги, 1</p>
-            <p><strong>Куди:</strong> вул. Лесі Українки, 8</p>
-            <p><strong>Статус:</strong> Скасовано</p>
+    <!-- Модальне вікно для замовлення поїздки -->
+    <input type="checkbox" id="order-modal-toggle" />
+    <div class="modal">
+        <div class="modal-content">
+            <div th:if="${trip != null}">
+                <form th:action="@{/trips}" th:object="${trip}" method="post">
+                    <h2>Замовлення поїздки</h2>
+                    <div class="form-group">
+                        <label for="fromStreet">Звідки (вулиця):</label>
+                        <input type="text" id="fromStreet" th:field="*{fromStreet}" required />
+                        <span th:if="${#fields.hasErrors('fromStreet')}" th:errors="*{fromStreet}" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="fromNumber">Звідки (номер будинку):</label>
+                        <input type="text" id="fromNumber" th:field="*{fromNumber}" required />
+                        <span th:if="${#fields.hasErrors('fromNumber')}" th:errors="*{fromNumber}" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="toStreet">Куди (вулиця):</label>
+                        <input type="text" id="toStreet" th:field="*{toStreet}" required />
+                        <span th:if="${#fields.hasErrors('toStreet')}" th:errors="*{toStreet}" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="toNumber">Куди (номер будинку):</label>
+                        <input type="text" id="toNumber" th:field="*{toNumber}" required />
+                        <span th:if="${#fields.hasErrors('toNumber')}" th:errors="*{toNumber}" style="color: red;"></span>
+                    </div>
+                    <h3>Карта (приклад Google Maps)</h3>
+                    <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509363!2d144.95373531590438!3d-37.81627974202114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43f3a0a1f5%3A0xf572b5e8e5b1d930!2sFederation+Square!5e0!3m2!1sen!2sau!4v1510911762115"
+                            allowfullscreen>
+                    </iframe>
+                    <button type="submit" class="confirm-btn">Замовити таксі</button>
+                </form>
+            </div>
+            <label for="order-modal-toggle" class="close-label">Закрити</label>
         </div>
     </div>
-</section>
 
-<section>
-    <h2>Часті запитання</h2>
-    <div class="features">
-        <div class="feature">
-            <p><strong>Як замовити поїздку?</strong></p>
-            <p>Натисніть кнопку “Замовити поїздку” та заповніть форму.</p>
-        </div>
-        <div class="feature">
-            <p><strong>Чи можу я оплатити карткою?</strong></p>
-            <p>Так, водії приймають оплату карткою або готівкою.</p>
+    <!-- Модальне вікно для статусу поїздки -->
+    <input type="checkbox" id="trip-status-modal-toggle" th:checked="${newTrip != null}" />
+    <div class="trip-status-modal">
+        <div class="trip-status-modal-content">
+            <h2>Статус поїздки</h2>
+            <div th:if="${newTrip != null}">
+                <p><strong>ID поїздки:</strong> <span th:text="${newTrip.id}"></span></p>
+                <p><strong>Звідки:</strong> <span th:text="${newTrip.fromStreet} + ', ' + ${newTrip.fromNumber}"></span></p>
+                <p><strong>Куди:</strong> <span th:text="${newTrip.toStreet} + ', ' + ${newTrip.toNumber}"></span></p>
+                <p><strong>Статус:</strong> <span th:text="${newTrip.status}"></span></p>
+                <form th:action="@{/trips/refresh-status}" method="post">
+                    <input type="hidden" name="tripId" th:value="${newTrip.id}"/>
+                    <button type="submit" class="refresh-btn">Оновити статус</button>
+                </form>
+                <form th:action="@{/trips/cancel}" method="post">
+                    <input type="hidden" name="tripId" th:value="${newTrip.id}"/>
+                    <button type="submit" class="cancel-btn">Відмінити поїздку</button>
+                </form>
+            </div>
+            <div th:if="${newTrip == null}">
+                <p>Інформація про поїздку недоступна.</p>
+            </div>
+            <label for="trip-status-modal-toggle" class="close-btn">Закрити</label>
         </div>
     </div>
-</section>
 
-<footer>
-    <p>© 2025 Valik Taxi. Всі права захищені.</p>
-    <p>
-        <a href="https://facebook.com" target="_blank">Facebook</a> |
-        <a href="https://instagram.com" target="_blank">Instagram</a>
-    </p>
-</footer>
+    <!-- Модальне вікно для перегляду поїздок -->
+    <input type="checkbox" id="trips-modal-toggle" />
+    <div class="trips-modal">
+        <div class="trip-modal">
+            <h2>Доступні поїздки</h2>
+            <div th:if="${trips == null or trips.isEmpty()}">
+                <p>Немає доступних поїздок.</p>
+            </div>
+            <div th:unless="${trips == null or trips.isEmpty()}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>З вулиці</th>
+                        <th>Номер будинку</th>
+                        <th>До вулиці</th>
+                        <th>Номер будинку</th>
+                        <th>Дія</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="trip : ${trips}">
+                        <td th:text="${trip.id}"></td>
+                        <td th:text="${trip.fromStreet}"></td>
+                        <td th:text="${trip.fromNumber}"></td>
+                        <td th:text="${trip.toStreet}"></td>
+                        <td th:text="${trip.toNumber}"></td>
+                        <td>
+                            <form th:action="@{/trips/accept}" method="post">
+                                <input type="hidden" name="tripId" th:value="${trip.id}"/>
+                                <button type="submit" class="confirm-btn">Узятись за поїздку</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <label for="trips-modal-toggle" class="close-btn">Закрити</label>
+        </div>
+    </div>
 
+    <!-- Модальне вікно для підтвердження/скасування поїздки -->
+    <input type="checkbox" id="confirm-modal-toggle" th:checked="${selectedTrip != null}" />
+    <div class="confirm-modal">
+        <div class="confirm-modal-content">
+            <h2>Підтвердження поїздки</h2>
+            <div th:if="${selectedTrip != null}">
+                <p><strong>Куди:</strong> <span th:text="${selectedTrip.toStreet} + ', ' + ${selectedTrip.toNumber}"></span></p>
+                <form th:action="@{/trips/complete}" method="post">
+                    <input type="hidden" name="tripId" th:value="${selectedTrip.id}"/>
+                    <button type="submit" class="confirm-btn">Завершити поїздку</button>
+                </form>
+                <form th:action="@{/trips/cancel}" method="post">
+                    <input type="hidden" name="tripId" th:value="${selectedTrip.id}"/>
+                    <button type="submit" class="cancel-btn">Відмовитись від поїздки</button>
+                </form>
+            </div>
+            <div th:if="${selectedTrip == null}">
+                <p>Поїздка не вибрана.</p>
+            </div>
+            <label for="confirm-modal-toggle" class="close-btn">Закрити</label>
+        </div>
+    </div>
+
+    <!-- Модальне вікно для реєстрації водія -->
+    <input type="checkbox" id="driver-modal-toggle" />
+    <div class="driver-modal">
+        <div class="driver-modal-content">
+            <div th:if="${car != null}">
+                <form th:action="@{/cars/register}" th:object="${car}" method="post">
+                    <h2>Реєстрація автомобіля</h2>
+                    <div class="form-group">
+                        <label for="brand">Марка:</label>
+                        <input type="text" id="brand" th:field="*{brand}" required />
+                        <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Модель:</label>
+                        <input type="text" id="model" th:field="*{model}" required />
+                        <span th:if="${#fields.hasErrors('model')}" th:errors="*{model}" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="color">Колір:</label>
+                        <input type="text" id="color" th:field="*{color}" required />
+                        <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="numberPlate">Номерний знак:</label>
+                        <input type="text" id="numberPlate" th:field="*{numberPlate}" required />
+                        <span th:if="${#fields.hasErrors('numberPlate')}" th:errors="*{numberPlate}" style="color: red;"></span>
+                    </div>
+                    <button type="submit" class="confirm-btn">Відправити</button>
+                </form>
+            </div>
+            <div th:if="${car == null}">
+                <p>Помилка: форма недоступна.</p>
+            </div>
+            <div th:if="${message != null}">
+                <p style="color: green;" th:text="${message}"></p>
+            </div>
+            <div th:if="${error != null}">
+                <p style="color: red;" th:text="${error}"></p>
+            </div>
+            <label for="driver-modal-toggle" class="close-btn">Закрити</label>
+        </div>
+    </div>
+
+    <!-- Модальне вікно для затвердження водія (адмін) -->
+    <input type="checkbox" id="admin-approve-driver-modal-toggle" />
+    <div class="admin-approve-driver-modal">
+        <div class="admin-approve-driver-modal-content">
+            <h2>Затвердити водія (Адмін)</h2>
+            <div th:if="${carRequests == null or carRequests.isEmpty()}">
+                <p>Немає запитів на затвердження водіїв
+
+                    .</p>
+            </div>
+            <div th:unless="${carRequests == null or carRequests.isEmpty()}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Логін користувача</th>
+                        <th>Марка</th>
+                        <th>Модель</th>
+                        <th>Колір</th>
+                        <th>Номерний знак</th>
+                        <th>Дія</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="car : ${carRequests}">
+                        <td th:text="${car.id}"></td>
+                        <td th:text="${car.riderLogin}"></td>
+                        <td th:text="${car.brand}"></td>
+                        <td th:text="${car.model}"></td>
+                        <td th:text="${car.color}"></td>
+                        <td th:text="${car.numberPlate}"></td>
+                        <td>
+                            <form th:action="@{/admin/approve-driver}" method="post">
+                                <input type="hidden" name="carId" th:value="${car.id}"/>
+                                <button type="submit" class="confirm-btn">Підтвердити</button>
+                            </form>
+                            <form th:action="@{/admin/reject-driver}" method="post">
+                                <input type="hidden" name="carId" th:value="${car.id}"/>
+                                <button type="submit" class="cancel-btn">Відхилити</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <label for="admin-approve-driver-modal-toggle" class="close-btn">Закрити</label>
+        </div>
+    </div>
+
+    <section>
+        <h2>Мої поїздки</h2>
+        <div class="features">
+            <div class="feature">
+                <p><strong>Дата:</strong> 15.05.2025</p>
+                <p><strong>Звідки:</strong> вул. Шевченка, 10</p>
+                <p><strong>Куди:</strong> вул. Франка, 25</p>
+                <p><strong>Статус:</strong> Виконано</p>
+            </div>
+            <div class="feature">
+                <p><strong>Дата:</strong> 14.05.2025</p>
+                <p><strong>Звідки:</strong> просп. Перемоги, 1</p>
+                <p><strong>Куди:</strong> вул. Лесі Українки, 8</p>
+                <p><strong>Статус:</strong> Скасовано</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Часті запитання</h2>
+        <div class="features">
+            <div class="feature">
+                <p><strong>Як замовити поїздку?</strong></p>
+                <p>Натисніть кнопку “Замовити поїздку” та заповніть форму.</p>
+            </div>
+            <div class="feature">
+                <p><strong>Чи можу я оплатити карткою?</strong></p>
+                <p>Так, водії приймають оплату карткою або готівкою.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Valik Taxi. Всі права захищені.</p>
+        <p>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+        </p>
+    </footer>
+</div>
+<div th:unless="${#authorization.expression('isAuthenticated()')}">
+    <p>Будь ласка, увійдіть, щоб переглянути цю сторінку.</p>
+    <a th:href="@{/login}">Увійти</a>
+</div>
+</body>
 <script>
     function toggleTheme() {
         document.body.classList.toggle('dark-theme');
     }
 </script>
-</body>
 </html>
