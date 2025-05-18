@@ -21,4 +21,5 @@ public class Car {
     private String color;
     private String numberPlate;
     private String riderLogin;
+    private Boolean active;
 }

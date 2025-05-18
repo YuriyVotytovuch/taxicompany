@@ -26,8 +26,9 @@ public class CarController {
     @PostMapping("/cars/register")
     public String registerCar(@ModelAttribute("car") Car car, Model model) {
         try {
+            car.setActive(true);
             carService.saveCar(car);
-            model.addAttribute("message", "Автомобіль успішно зареєстровано!");
+            model.addAttribute("message", "Ви подали заявку на реєстрацію!");
         } catch (SecurityException e) {
             model.addAttribute("error", "Потрібно увійти в систему для реєстрації автомобіля.");
         }
