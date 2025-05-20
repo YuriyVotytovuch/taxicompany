@@ -69,13 +69,38 @@
         }
 
         .container {
-            padding: 100px 20px 60px;
+            position: relative;
+            padding: 0x;
             text-align: center;
         }
 
+        .img {
+            width: 100%;
+            position: relative;
+        }
+
+        .img img {
+            width: 115%;
+            height: auto;
+            display: block;
+        }
+
+        .button-grid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2vw;
+            width: 60%; /* Scales relative to image */
+            max-width: 800px;
+            z-index: 2;
+        }
+
         .order-btn {
-            padding: 15px 35px;
-            font-size: 18px;
+            padding: 1.5vw 5vw;
+            font-size: 1.2vw;
             background-color: var(--primary);
             color: var(--dark);
             border: none;
@@ -83,6 +108,8 @@
             cursor: pointer;
             font-weight: bold;
             transition: var(--transition);
+            width: 100%;
+            text-align: center;
         }
 
         .order-btn:hover {
@@ -91,7 +118,7 @@
         }
 
         #order-modal-toggle, #trips-modal-toggle, #confirm-modal-toggle, #driver-modal-toggle, #approve-driver-modal-toggle, #admin-approve-driver-modal-toggle, #trip-status-modal-toggle {
-            display: none;
+            display: flex;
         }
 
         .modal, .trips-modal, .confirm-modal, .driver-modal, .approve-driver-modal, .admin-approve-driver-modal, .trip-status-modal {
@@ -304,8 +331,15 @@
                 padding: 25px;
             }
 
+            .button-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5vw;
+                width: 80%;
+            }
+
             .order-btn {
-                width: 100%;
+                font-size: 3vw;
+                padding: 2vw 5vw;
             }
         }
 
@@ -392,20 +426,24 @@
         </div>
     </nav>
 
-    <div class="container" th:if="${#authorization.expression('hasRole(''USER'') or hasRole(''DRIVER'') or hasRole(''ADMIN'')')}">
-        <label for="order-modal-toggle" class="order-btn">Замовити поїздку</label>
-    </div>
-
-    <div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''USER'')')}">
-        <label for="driver-modal-toggle" class="order-btn">Стати водієм</label>
-    </div>
-
-    <div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-        <label for="admin-approve-driver-modal-toggle" class="order-btn">Одобрити водія</label>
-    </div>
-
-    <div class="container" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''DRIVER'')')}">
-        <label for="trips-modal-toggle" class="order-btn">Переглянути доступні поїздки</label>
+    <div class="container">
+        <div class="img">
+            <img src="https://i.ibb.co/Y45fmZQv/picture2.png" alt="Background Image">
+            <div class="button-grid">
+                <div th:if="${#authorization.expression('hasRole(''USER'') or hasRole(''DRIVER'') or hasRole(''ADMIN'')')}">
+                    <label for="order-modal-toggle" class="order-btn">Замовити поїздку</label>
+                </div>
+                <div th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''USER'')')}">
+                    <label for="driver-modal-toggle" class="order-btn">Стати водієм</label>
+                </div>
+                <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <label for="admin-approve-driver-modal-toggle" class="order-btn">Одобрити водія</label>
+                </div>
+                <div th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''DRIVER'')')}">
+                    <label for="trips-modal-toggle" class="order-btn">Переглянути доступні поїздки</label>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Модальне вікно для замовлення поїздки -->
@@ -586,9 +624,7 @@
         <div class="admin-approve-driver-modal-content">
             <h2>Затвердити водія (Адмін)</h2>
             <div th:if="${carRequests == null or carRequests.isEmpty()}">
-                <p>Немає запитів на затвердження водіїв
-
-                    .</p>
+                <p>Немає запитів на затвердження водіїв.</p>
             </div>
             <div th:unless="${carRequests == null or carRequests.isEmpty()}">
                 <table>
@@ -630,30 +666,19 @@
     </div>
 
     <section>
-        <h2>Мої поїздки</h2>
-        <div class="features">
-            <div class="feature">
-                <p><strong>Дата:</strong> 15.05.2025</p>
-                <p><strong>Звідки:</strong> вул. Шевченка, 10</p>
-                <p><strong>Куди:</strong> вул. Франка, 25</p>
-                <p><strong>Статус:</strong> Виконано</p>
-            </div>
-            <div class="feature">
-                <p><strong>Дата:</strong> 14.05.2025</p>
-                <p><strong>Звідки:</strong> просп. Перемоги, 1</p>
-                <p><strong>Куди:</strong> вул. Лесі Українки, 8</p>
-                <p><strong>Статус:</strong> Скасовано</p>
-            </div>
-        </div>
-    </section>
-
-    <section>
         <h2>Часті запитання</h2>
         <div class="features">
             <div class="feature">
                 <p><strong>Як замовити поїздку?</strong></p>
                 <p>Натисніть кнопку “Замовити поїздку” та заповніть форму.</p>
             </div>
+
+            <div class="feature">
+                <p><strong>Як звернутися до техпідтримки?</strong></p>
+                <p>Telegram:</p>
+                <a href="https://t.me/TaxiHelperrBot"><img src="https://i.ibb.co/xSzNXsZK/qrcode.png" alt="QR-код для техпідтримки" style="width: 100px; height: 100px;"></a>
+            </div>
+
             <div class="feature">
                 <p><strong>Чи можу я оплатити карткою?</strong></p>
                 <p>Так, водії приймають оплату карткою або готівкою.</p>
