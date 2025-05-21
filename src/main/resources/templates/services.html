@@ -1,261 +1,238 @@
 <!DOCTYPE html>
- <html lang="uk" xmlns:th="http://www.thymeleaf.org">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Valik Taxi — Ваш комфортний сервіс таксі</title>
-      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Valik Taxi — Ваш комфортний сервіс таксі</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-      <script src="taxi.js"></script>
-      </head>
-    <style>
+    <script src="taxi.js"></script>
+</head>
+<style>
 
-      :root {
-        --primary: #ffc107;
-        --dark: #212529;
-        --light: #f8f9fa;
-        --accent: #ff6f00;
-        --transition: all 0.4s ease;
-      }
+    :root {
+      --primary: #ffc107;
+      --dark: #212529;
+      --light: #f8f9fa;
+      --accent: #ff6f00;
+      --transition: all 0.4s ease;
+    }
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        scroll-behavior: smooth;
-      }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
 
-      body {
-        font-family: 'Roboto', sans-serif;
-        background: var(--light);
-        color: var(--dark);
-        line-height: 1.6;
-      }
-      .logo-img {
-        width: 25px;
-        height: 25px;
-        object-fit: cover;
-      }
-      nav {
-        background: var(--dark);
-        padding: 15px 20px;
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    .logo-img {
+      width: 25px;
+      height: 25px;
+      object-fit: cover;
+    }
+    nav {
+      background: var(--dark);
+      padding: 15px 20px;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      nav .logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--primary);
-        font-weight: 700;
-        font-size: 1.5rem;
-        text-transform: uppercase;
-        text-decoration: none;
-      }
-
-
-      nav a {
-        color: #fff;
-        margin-left: 20px;
-        text-decoration: none;
-        font-weight: 500;
-        transition: var(--transition);
-      }
-
-      nav a:hover {
-        color: var(--primary);
-      }
-      header {
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://i.imgur.com/qn0TZu5.jpeg') center/cover no-repeat;
-        height: 100vh;
-        color: white;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-      }
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
 
 
-      header h1 {
-        font-size: 3rem;
-        margin-bottom: 10px;
-      }
+    nav a {
+      color: #fff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
 
-      header p {
-        font-size: 1.2rem;
-        margin-bottom: 30px;
-      }
+    nav a:hover {
+      color: var(--primary);
+    }
 
-      .btn {
-        padding: 15px 35px;
-        background: var(--primary);
-        color: var(--dark);
-        font-weight: 700;
-        border: none;
-        border-radius: 50px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: var(--transition);
-      }
+    section {
+      padding: 80px 20px;
+      text-align: center;
+      max-width: 1200px;
+      margin: auto;
+    }
 
-      .btn:hover {
-        background: var(--accent);
-        transform: scale(1.05);
-      }
+    section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
 
-      section {
-        padding: 80px 20px;
-        text-align: center;
-        max-width: 1200px;
-        margin: auto;
-      }
+    .features, contacts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
 
-      section h2 {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
-        color: var(--dark);
-      }
+    .feature, .contact {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: var(--transition);
+    }
 
-      .features, .contacts {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 30px;
-        margin-top: 40px;
-      }
+    .feature:hover, .contact:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
 
-      .feature, .contact {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        transition: var(--transition);
-      }
+    .feature i, .contact i {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
 
-      .feature:hover, .contact:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      }
-
-      .feature i, .contact i {
-        font-size: 2.5rem;
-        color: var(--primary);
-        margin-bottom: 15px;
-      }
-
-      footer {
+    footer {
         background: var(--dark);
         color: #ccc;
-        text-align: center;
-        padding: 20px;
+        padding: 20px 20px;
         font-size: 0.9rem;
-        margin-top: 80px;
-      }
-
-      /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-      }
-
-      .modal-content {
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        width: 90%;
-        max-width: 500px;
-        text-align: center;
-        position: relative;
-      }
-
-      .modal-content input, .modal-content textarea {
+        margin: 0;
         width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-      }
+        display: flex;
+        flex-direction: column;
+  align-items: center;
+  position:fixed;
+ left:0px;
+ bottom:0px;
+}
 
-      .modal-content input[type="submit"] {
-        background: var(--primary);
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: var(--transition);
-      }
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
 
-      .modal-content input[type="submit"]:hover {
-        background: var(--accent);
-      }
+}
 
-      .close {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--dark);
-      }
+.footer-left, .footer-right {
+  flex: 1;
+  text-align: left;
+}
 
-      @media (max-width: 768px) {
-        nav {
-          flex-direction: column;
-          align-items: flex-start;
-        }
+.footer-right {
+  text-align: right;
+}
+
+footer p {
+  margin: 5px 0;
+}
+
+footer a {
+  color: #ccc;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+footer a:hover {
+  color: var(--primary);
+}
+
+.footer-copyright {
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+  }
+}
+
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
       }
-    </style>
+    }
+</style>
 <body>
-  <nav>
+<nav>
     <div class="logo">
-      <a href="/main"><img class="logo-img" src="https://i.imgur.com/xQrNR8y.png" alt="Valik LOGO"></a>
+        <a href="/main"><img class="logo-img" src="https://i.imgur.com/xQrNR8y.png" alt="Valik LOGO"></a>
         <a href="main.html"><p>Valik Taxi</p></a>
-      </div>
+    </div>
     <div>
-      <div th:if="${#authorization.expression('isAuthenticated()')}">
-        <a href="/services">Послуги</a>
-        <a href="/contact">Контакти</a>
-        <a href=/account>Аккаунт</a>
-      </div>
-      <div th:unless="${#authorization.expression('isAuthenticated()')}">
-        <a href="/services">Послуги</a>
-        <a href="/contact">Контакти</a>
-        <a th:href="@{/login}">Увійти</a>
-      </div>
-    </nav>
-      <section id="services">
-        <h2>Наші Послуги</h2>
-        <div class="features">
-          <div class="feature">
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <a href="/services">Послуги</a>
+            <a href="/contact">Контакти</a>
+            <a href=/account>Акаунт</a>
+        </div>
+        <div th:unless="${#authorization.expression('isAuthenticated()')}">
+            <a href="/services">Послуги</a>
+            <a href="/contact">Контакти</a>
+            <a th:href="@{/login}">Увійти</a>
+        </div>
+    </div>
+</nav>
+<section id="services">
+    <h2>Наші Послуги</h2>
+    <div class="features">
+        <div class="feature">
             <h3>Поїздки по місту</h3>
             <p>Швидко доставимо вас до потрібного місця по місту.</p>
-          </div>
-          <div class="feature">
+        </div>
+        <div class="feature">
             <h3>Трансфер в аеропорт</h3>
             <p>Зручно та вчасно доставимо вас у будь-який аеропорт.</p>
-          </div>
-          <div class="feature">
+        </div>
+        <div class="feature">
             <h3>Доставка посилок</h3>
             <p>Оперативна доставка важливих документів та посилок.</p>
-          </div>
-          <div class="feature">
-                        <h3>Корпоративне обслуговування</h3>
-            <p>Зручні умови співпраці для бізнесу та компаній.</p>
-          </div>
         </div>
-      </section>
-      <footer>
-        <p>&copy; 2025 Valik Taxi. Всі права захищено.</p>
-      </footer>
+        <div class="feature">
+            <h3>Корпоративне обслуговування</h3>
+            <p>Зручні умови співпраці для бізнесу та компаній.</p>
+        </div>
+    </div>
+</section>
+<footer>
+    <div class="footer-container">
+        <div class="footer-left">
+            <p>Контакти:</p>
+            <p>Телефон: <a href="tel:+380123456789">+380 123 456 789</a></p>
+        </div>
+        <div class="footer-right">
+            <p>Email: <a href="mailto:info@valiktaxi.com">info@valiktaxi.com</a></p>
+            <p>Адреса: вул. Центральна, 123, м. Київ, Україна</p>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <p>© 2025 Valik Taxi. Всі права захищено.</p>
+    </div>
+</footer>
 </body>
 </html>

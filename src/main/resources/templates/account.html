@@ -2,7 +2,7 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Аккаунт користувача</title>
+    <title>Акаунт користувача</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -80,7 +80,7 @@
         }
 
         .img img {
-            width: 115%;
+            width: 122%;
             height: auto;
             display: block;
         }
@@ -304,22 +304,66 @@
         }
 
         footer {
-            background: var(--dark);
-            color: #ccc;
-            text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            margin-top: 80px;
-        }
+        background: var(--dark);
+        color: #ccc;
+        padding: 20px 20px;
+        font-size: 0.9rem;
+        margin: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-        footer a {
-            color: #ccc;
-            text-decoration: none;
-        }
+    }
 
-        footer a:hover {
-            color: var(--primary);
-        }
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1200px;
+        margin-bottom: 20px;
+    }
+
+    .footer-left, .footer-right {
+        flex: 1;
+        text-align: left;
+    }
+
+    .footer-right {
+        text-align: right;
+    }
+
+    footer p {
+        margin: 5px 0;
+    }
+
+    footer a {
+        color: #ccc;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    footer a:hover {
+        color: var(--primary);
+    }
+
+    .footer-copyright {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-left, .footer-right {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    }
 
         @media (max-width: 768px) {
             nav {
@@ -421,7 +465,7 @@
         <div>
             <a href="/services">Послуги</a>
             <a href="/contact">Контакти</a>
-            <a th:href="@{/logout}">Вихід з аккаунту</a>
+            <a th:href="@{/logout}">Вихід з акаунту</a>
             <button id="theme-toggle" title="Перемкнути тему" onclick="toggleTheme()">🌙</button>
         </div>
     </nav>
@@ -686,13 +730,21 @@
         </div>
     </section>
 
-    <footer>
-        <p>© 2025 Valik Taxi. Всі права захищені.</p>
-        <p>
-            <a href="https://facebook.com" target="_blank">Facebook</a> |
-            <a href="https://instagram.com" target="_blank">Instagram</a>
-        </p>
-    </footer>
+    <<footer>
+    <div class="footer-container">
+        <div class="footer-left">
+            <p>Контакти:</p>
+            <p>Телефон: <a href="tel:+380123456789">+380 123 456 789</a></p>
+        </div>
+        <div class="footer-right">
+            <p>Email: <a href="mailto:info@valiktaxi.com">info@valiktaxi.com</a></p>
+            <p>Адреса: вул. Центральна, 123, м. Київ, Україна</p>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <p>© 2025 Valik Taxi. Всі права захищено.</p>
+    </div>
+</footer>
 </div>
 <div th:unless="${#authorization.expression('isAuthenticated()')}">
     <p>Будь ласка, увійдіть, щоб переглянути цю сторінку.</p>

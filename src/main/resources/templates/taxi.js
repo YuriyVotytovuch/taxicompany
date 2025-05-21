@@ -6,7 +6,6 @@ function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
 function themeToggle() {
-    // Initialize scroll animation
     const elements = document.querySelectorAll('.feature, .contact');
     const observer = new IntersectionObserver(
         (entries) => {
@@ -27,7 +26,6 @@ function themeToggle() {
         observer.observe(el);
     });
 
-    // Initialize dark mode toggle
     const toggleButton = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme');
 

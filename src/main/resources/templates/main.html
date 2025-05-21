@@ -122,32 +122,6 @@
     color: var(--dark);
   }
 
-  .features, .contacts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-  }
-
-  .feature, .contact {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: var(--transition);
-  }
-
-  .feature:hover, .contact:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  }
-
-  .feature i, .contact i {
-    font-size: 2.5rem;
-    color: var(--primary);
-    margin-bottom: 15px;
-  }
-
   footer {
     background: var(--dark);
     color: #ccc;
@@ -166,15 +140,6 @@
     width: 100%;
     max-width: 1200px;
     margin-bottom: 20px;
-  }
-
-  .footer-left, .footer-right {
-    flex: 1;
-    text-align: left;
-  }
-
-  .footer-right {
-    text-align: right;
   }
 
   footer p {
@@ -209,57 +174,6 @@
     }
   }
 
-
-  /* Modal */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
-    position: relative;
-  }
-
-  .modal-content input, .modal-content textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-
-  .modal-content input[type="submit"] {
-    background: var(--primary);
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition);
-  }
-
-  .modal-content input[type="submit"]:hover {
-    background: var(--accent);
-  }
-
-  .close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--dark);
-  }
-
   @media (max-width: 768px) {
     nav {
       flex-direction: column;
@@ -278,7 +192,7 @@
       <div th:if="${#authorization.expression('isAuthenticated()')}">
         <a href="/services">Послуги</a>
         <a href="/contact">Контакти</a>
-        <a href=/account>Аккаунт</a>
+        <a href=/account>Акаунт</a>
       </div>
       <div th:unless="${#authorization.expression('isAuthenticated()')}">
         <a href="/services">Послуги</a>
@@ -292,7 +206,12 @@
 <header>
   <h1>Швидке та Надійне Таксі</h1>
   <p>Ваш комфорт — наш пріоритет!</p>
-  <a href="/login" class="btn">Замовити таксі</a>
+  <div th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href=/account class="btn">Замовити таксі</a>
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+      <a href="/login" class="btn">Замовити таксі</a>
+    </div>
+  </div>
 </header>
 
 
